@@ -34,7 +34,6 @@ import time
 from typing import List, Tuple, Union, Dict
 
 import jax
-from jax.config import config
 import jax.numpy as jnp
 
 from jaxfluids.boundary_condition import BoundaryCondition
@@ -78,7 +77,7 @@ class SimulationManager:
         self.input_reader       = input_reader
         self.numerical_setup    = self.input_reader.numerical_setup
 
-        config.update("jax_enable_x64", self.numerical_setup["output"]["is_double_precision_compute"])
+        jax.config.update("jax_enable_x64", self.numerical_setup["output"]["is_double_precision_compute"])
 
         # SET EPSILON IN CLASSES
         self.eps    = jnp.finfo(jnp.float64).eps if self.numerical_setup["output"]["is_double_precision_compute"] \
