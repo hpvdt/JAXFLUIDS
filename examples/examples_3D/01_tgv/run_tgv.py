@@ -19,14 +19,14 @@ cell_centers, cell_sizes, times, data_dict = load_data(path, quantities)
 
 # PLOT
 plot_dict = {
-    "velocity":  np.sqrt(data_dict["velocityX"]**2 + data_dict["velocityY"]**2 + data_dict["velocityZ"]**2),
-    "vorticity": np.sqrt(data_dict["vorticityX"]**2 + data_dict["vorticityY"]**2 + data_dict["vorticityZ"]**2),
+    "velocity":  np.sqrt((data_dict["velocity"]**2).sum(axis=1)),
+    "vorticity": np.sqrt((data_dict["vorticity"]**2).sum(axis=1)),
 }
 nrows_ncols = (1,2)
 create_contourplot(plot_dict, cell_centers, times, nrows_ncols=nrows_ncols, plane="xy", plane_value=np.pi/2, interval=100)
 
 data_ref = np.loadtxt("tgv_reference_data.txt")
-TKE = 0.5 * np.mean(data_dict["velocityX"]**2 + data_dict["velocityY"]**2 + data_dict["velocityZ"]**2, axis=(1,2,3))
+TKE = 0.5 * np.mean((data_dict["velocity"]**2).sum(axis=1), axis=(1,2,3))
 
 fig, ax = plt.subplots()
 ax.plot(times[:-1], -(TKE[1:]-TKE[:-1])/(times[1:]-times[:-1]), label="present")
